@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface ModelService {
 
+    List<ModelDto> getAllModels();
+
     ModelDto createNewModel(ModelDto model);
 
     Optional<List<ModelDto>> getModelsOfUniqueBrand(BrandDto brand);
@@ -16,6 +18,8 @@ public interface ModelService {
     Optional<ModelDto> getModelWithUniqueName(String modelName);
 
     Optional<List<ModelDto>> getModelsOfCategory(Category category);
+
+    void updateModelEndYear(int endYear, ModelDto modelDto);
 
     void addModelImage(String imageUrl, String id);
 

@@ -1,26 +1,18 @@
 package com.example.springdatabasicdemo.services.impl;
 
-import com.example.springdatabasicdemo.dtos.ModelDto;
 import com.example.springdatabasicdemo.dtos.OfferDto;
 import com.example.springdatabasicdemo.dtos.UserDto;
 import com.example.springdatabasicdemo.enums.Engine;
-import com.example.springdatabasicdemo.models.Brand;
-import com.example.springdatabasicdemo.models.Model;
 import com.example.springdatabasicdemo.models.Offer;
 import com.example.springdatabasicdemo.models.User;
-import com.example.springdatabasicdemo.repositories.ModelRepository;
 import com.example.springdatabasicdemo.repositories.OfferRepository;
 import com.example.springdatabasicdemo.services.OfferService;
-import com.example.springdatabasicdemo.util.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,8 +24,6 @@ public class OfferServiceImpl implements OfferService {
 
     OfferRepository offerRepository;
 
-    ValidationUtil validationUtil;
-
     @Autowired
     public void setModelMapper(ModelMapper modelMapper) {this.modelMapper = modelMapper;}
 
@@ -41,10 +31,6 @@ public class OfferServiceImpl implements OfferService {
     public void setOfferRepository(OfferRepository offerRepository) {
         this.offerRepository = offerRepository;
     }
-
-    @Autowired
-    public void setValidationUtil(ValidationUtil validationUtil) {this.validationUtil = validationUtil; }
-
 
     /*@Override
     public OfferDto createNewOffer(OfferDto offerEntity) {
@@ -79,14 +65,6 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public OfferDto createNewOffer(OfferDto offerEntity) {
-        if (!this.validationUtil.isValid(offerEntity)) {
-            this.validationUtil
-                    .violations(offerEntity)
-                    .stream()
-                    .map(ConstraintViolation::getMessage)
-                    .forEach(System.out::println);
-
-        } else {
             try {
                 Offer offerEx = modelMapper.map(offerEntity, Offer.class);
 
@@ -95,9 +73,23 @@ public class OfferServiceImpl implements OfferService {
             } catch (Exception e) {
                 System.out.println("Some thing went wrong!");
             }
-        }
 
         return offerEntity;
+    }
+
+    @Override
+    public Optional<List<OfferDto>> getAllOffers() {
+        List<Offer> offers = offerRepository.findAll();
+
+        if (!offers.isEmpty()) {
+            List<OfferDto> offerDtos = offers.stream()
+                    .map(offer -> modelMapper.map(offer, OfferDto.class))
+                    .collect(Collectors.toList());
+
+            return Optional.of(offerDtos);
+        }
+
+        return Optional.empty();
     }
 
     @Override

@@ -13,6 +13,8 @@ public interface OfferService {
     Optional<OfferDto> getOfferById(String id);
     OfferDto createNewOffer(OfferDto offer);
 
+    Optional<List<OfferDto>> getAllOffers();
+
     Optional<List<OfferDto>> getOffersLessThanPrice(BigDecimal price);
 
     Optional<List<OfferDto>> getOffersByEngineType(String engine);

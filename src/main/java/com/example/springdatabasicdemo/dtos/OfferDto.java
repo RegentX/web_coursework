@@ -7,9 +7,8 @@ import com.example.springdatabasicdemo.models.Model;
 import com.example.springdatabasicdemo.models.Offer;
 import com.example.springdatabasicdemo.models.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,7 +16,9 @@ import java.time.LocalDate;
 
 public class OfferDto {
 
-    private String id;
+    private String modelName;
+
+    private String userName;
 
     private LocalDate created;
 
@@ -38,36 +39,31 @@ public class OfferDto {
     private int offerYear;
 
 
-    protected OfferDto() {
+    public OfferDto() {
 
     }
 
-    public OfferDto(
-            String id,
-            String description,
-            Engine engine,
-            String imageUrl,
-            int mileage,
-            BigDecimal price,
-            Transmission transmission,
-            int offerYear,
-            ModelDto model,
-            UserDto seller,
-            LocalDate created,
-            LocalDate modified
-            ) {
-        this.created = created;
-        this.modified = modified;
-        this.description = description;
-        this.engine = engine;
-        this.imageUrl = imageUrl;
-        this.mileage = mileage;
-        this.price = price;
-        this.transmission = transmission;
-        this.offerYear = offerYear;
-        this.id = id;
+    @NotEmpty(message = "Model name cannot be null or empty!")
+    @Length(min = 1, message = "Model name should be at least 1 characters long!")
+    public String getModelName() {
+        return modelName;
     }
 
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    @NotEmpty(message = "User name cannot be null or empty!")
+    @Length(min = 1, message = "User name should be at least 1 characters long!")
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @NotNull(message = "Date of creation cannot be null or empty!")
     public LocalDate getCreated() {
         return created;
     }
@@ -77,7 +73,8 @@ public class OfferDto {
     }
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Description cannot be null or empty!")
+    @Size(min = 1, max=100, message = "Description should be at least 1 characters long!")
     public String getDescription() {
         return description;
     }
@@ -86,6 +83,7 @@ public class OfferDto {
         this.description = description;
     }
 
+    @NotNull(message="Category cannot be null. Please choose it!")
     public Engine getEngine() {
         return engine;
     }
@@ -94,8 +92,8 @@ public class OfferDto {
         this.engine = engine;
     }
 
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Image url cannot be null or empty!")
+    @Length(min = 10, max = 255, message = "URL of image must be more than 10 characters!")
     public String getImageUrl() {
         return imageUrl;
     }
@@ -112,6 +110,7 @@ public class OfferDto {
         this.mileage = mileage;
     }
 
+    @NotNull(message = "Date of modification cannot be null or empty!")
     public LocalDate getModified() {
         return modified;
     }
@@ -129,6 +128,7 @@ public class OfferDto {
         this.price = price;
     }
 
+    @NotNull(message="Transmission cannot be null. Please choose it!")
     public Transmission getTransmission() {
         return transmission;
     }
@@ -137,6 +137,8 @@ public class OfferDto {
         this.transmission = transmission;
     }
 
+    @Min(value = 1880, message = "Year must be a number after 1880!")
+    @NotNull(message = "Year must not be null or empty!")
     public int getOfferYear() {
         return offerYear;
     }
@@ -145,12 +147,4 @@ public class OfferDto {
         this.offerYear = offerYear;
     }
 
-
-    public String getId() {
-        return id;
-    }
-
-    protected void setId(String id) {
-        this.id = id;
-    }
 }

@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -17,8 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 public class UserDto {
-
-    private String id;
 
     private boolean isActive;
 
@@ -38,21 +37,9 @@ public class UserDto {
 
     private RoleDto role;
 
-    protected UserDto() {}
+    public UserDto() {}
 
-    public UserDto(String id, boolean isActive, String firstName, String imageUrl, String lastName, String userPassword, String userName, RoleDto role, LocalDate created, LocalDate modified) {
-        this.isActive = isActive;
-        this.firstName = firstName;
-        this.imageUrl = imageUrl;
-        this.lastName = lastName;
-        this.userPassword = userPassword;
-        this.username = userName;
-        this.role = role;
-        this.created = created;
-        this.modified = modified;
-        this.id = id;
-    }
-
+    @NotNull(message = "Please choose a status of user!")
     public boolean getIsActive() {
         return isActive;
     }
@@ -61,6 +48,7 @@ public class UserDto {
         this.isActive = isActive;
     }
 
+    @NotNull(message = "Date of creation cannot be null or empty!")
     public LocalDate getCreated() {
         return created;
     }
@@ -69,8 +57,8 @@ public class UserDto {
         this.created = created;
     }
 
-    @NotNull
     @NotEmpty
+    @Length(min = 2, message = "First name must be more than 2 characters!")
     public String getFirstName() {
         return firstName;
     }
@@ -79,8 +67,8 @@ public class UserDto {
         this.firstName = firstName;
     }
 
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Image url cannot be null or empty!")
+    @Length(min = 10, max = 255, message = "URL of image must be more than 10 characters!")
     public String getImageUrl() {
         return imageUrl;
     }
@@ -89,8 +77,8 @@ public class UserDto {
         this.imageUrl = imageUrl;
     }
 
-    @NotNull
     @NotEmpty
+    @Length(min = 2, message = "Last name must be more than 2 characters!")
     public String getLastName() {
         return lastName;
     }
@@ -99,6 +87,7 @@ public class UserDto {
         this.lastName = lastName;
     }
 
+    @NotNull(message = "Date of modification cannot be null or empty!")
     public LocalDate getModified() {
         return modified;
     }
@@ -107,8 +96,8 @@ public class UserDto {
         this.modified = modified;
     }
 
-    @NotNull
     @NotEmpty
+    @Length(min = 8, message = "Password must be more than 8 characters!")
     public String getUserPassword() {
         return userPassword;
     }
@@ -117,8 +106,8 @@ public class UserDto {
         this.userPassword = userPassword;
     }
 
-    @NotNull
     @NotEmpty
+    @Length(min = 5, message = "User name must be more than 5 characters!")
     public String getUsername() {
         return username;
     }
@@ -135,11 +124,4 @@ public class UserDto {
         this.role = role;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    protected void setId(String id) {
-        this.id = id;
-    }
 }

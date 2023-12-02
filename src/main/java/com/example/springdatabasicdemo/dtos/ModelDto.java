@@ -2,8 +2,11 @@ package com.example.springdatabasicdemo.dtos;
 
 import com.example.springdatabasicdemo.enums.Category;
 import com.example.springdatabasicdemo.models.Offer;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -12,7 +15,7 @@ import java.util.Set;
 
 public class ModelDto {
 
-    private String id;
+    private String brandName;
 
     private String name;
 
@@ -28,27 +31,14 @@ public class ModelDto {
 
     private LocalDate modified;
 
-    private BrandDto brand;
-
 
     // Пустой конструктор для Hibernate, обратите внимание на модификатор доступа
-    protected ModelDto() {
-    }
-
-    public ModelDto(String id, String name, Category someCategory, String imageUrl, int startYear, int endYear, BrandDto brand, LocalDate created, LocalDate modified) {
-        this.id = id;
-        this.name = name;
-        this.category = someCategory;
-        this.imageUrl = imageUrl;
-        this.startYear = startYear;
-        this.endYear = endYear;
-        this.brand = brand;
-        this.created = created;
-        this.modified = modified;
+    public ModelDto() {
     }
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Name of model name cannot be null or empty!")
+    @Length(min = 2, message = "Name of model name should be at least 2 characters long!")
     public String getName() {
         return name;
     }
@@ -57,6 +47,7 @@ public class ModelDto {
         this.name = name;
     }
 
+    @NotNull(message = "Category cannot be null. Please choose it!")
     public Category getCategory() {
         return category;
     }
@@ -66,7 +57,8 @@ public class ModelDto {
     }
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Image url cannot be null or empty!")
+    @Length(min = 10, max = 255, message = "URL of image must be more than 10 characters!")
     public String getImageUrl() {
         return imageUrl;
     }
@@ -75,7 +67,8 @@ public class ModelDto {
         this.imageUrl = imageUrl;
     }
 
-
+    @Min(value = 1880, message = "Start year must be a year after 1880!")
+    @NotEmpty(message = "Start year must not be null or empty!")
     public int getStartYear() {
         return startYear;
     }
@@ -84,6 +77,8 @@ public class ModelDto {
         this.startYear = startYear;
     }
 
+    @Min(value = 1880, message = "Start year must be a year after 1880!")
+    @NotNull(message = "End year must not be null!")
     public int getEndYear() {
         return endYear;
     }
@@ -92,6 +87,7 @@ public class ModelDto {
         this.endYear = endYear;
     }
 
+    @NotNull(message = "Date of creation cannot be null or empty!")
     public LocalDate getCreated() {
         return created;
     }
@@ -100,6 +96,7 @@ public class ModelDto {
         this.created = created;
     }
 
+    @NotNull(message = "Date of modification cannot be null or empty!")
     public LocalDate getModified() {
         return modified;
     }
@@ -108,19 +105,14 @@ public class ModelDto {
         this.modified = modified;
     }
 
-    public BrandDto getBrand() {
-        return brand;
+    @NotEmpty(message = "Brand name cannot be null or empty!")
+    @Length(min = 2, message = "Brand name should be at least 2 characters long!")
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setBrand(BrandDto brand) {
-        this.brand = brand;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    protected void setId(String id) {
-        this.id = id;
-    }
 }

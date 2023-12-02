@@ -1,5 +1,6 @@
 package com.example.springdatabasicdemo.services;
 
+import com.example.springdatabasicdemo.dtos.AddBrandDto;
 import com.example.springdatabasicdemo.dtos.BrandDto;
 import com.example.springdatabasicdemo.dtos.ModelDto;
 import com.example.springdatabasicdemo.models.Brand;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface BrandService {
 
-    BrandDto addBrand(BrandDto brand);
+    AddBrandDto addBrand(AddBrandDto brand);
 
     List<BrandDto> getAllBrands();
 

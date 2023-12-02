@@ -14,8 +14,6 @@ import java.time.LocalDate;
 @Table(name = "offers")
 public class Offer extends BaseEntity{
 
-    private LocalDate created;
-
     private String description;
 
     private Engine engine;
@@ -23,8 +21,6 @@ public class Offer extends BaseEntity{
     private String imageUrl;
 
     private int mileage;
-
-    private LocalDate modified;
 
     private BigDecimal price;
 
@@ -38,41 +34,6 @@ public class Offer extends BaseEntity{
 
     protected Offer() {
 
-    }
-
-    public Offer(
-            LocalDate created,
-            LocalDate modified,
-            String description,
-            Engine engine,
-            String imageUrl,
-            int mileage,
-            BigDecimal price,
-            Transmission transmission,
-            int offerYear,
-            Model model,
-            User seller) {
-        this.created = created;
-        this.modified = modified;
-        this.description = description;
-        this.engine = engine;
-        this.imageUrl = imageUrl;
-        this.mileage = mileage;
-        this.price = price;
-        this.transmission = transmission;
-        this.offerYear = offerYear;
-        this.model = model;
-        this.seller = seller;
-    }
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "created", nullable = false)
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDate created) {
-        this.created = created;
     }
 
     @Column(name = "description", nullable = false)
@@ -110,16 +71,6 @@ public class Offer extends BaseEntity{
 
     public void setMileage(int mileage) {
         this.mileage = mileage;
-    }
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "modified", nullable = false)
-    public LocalDate getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDate modified) {
-        this.modified = modified;
     }
 
     @Column(name = "price", nullable = false)

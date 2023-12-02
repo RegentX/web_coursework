@@ -1,22 +1,21 @@
 package com.example.springdatabasicdemo.services.impl;
 
+import com.example.springdatabasicdemo.dtos.AddBrandDto;
 import com.example.springdatabasicdemo.dtos.BrandDto;
 import com.example.springdatabasicdemo.models.Brand;
 import com.example.springdatabasicdemo.repositories.BrandRepository;
 import com.example.springdatabasicdemo.services.BrandService;
-import com.example.springdatabasicdemo.util.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.dao.DataIntegrityViolationException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class BrandServiceImpl implements BrandService{
-    ValidationUtil validationUtil;
 
     ModelMapper modelMapper;
 
@@ -36,29 +35,18 @@ public class BrandServiceImpl implements BrandService{
         this.brandRepository = brandRepository;
     }
 
-    @Autowired
-    public void setValidationUtil(ValidationUtil validationUtil) {this.validationUtil = validationUtil; }
-
     @Override
-    public BrandDto addBrand(BrandDto brandEntity) {
-        if (!this.validationUtil.isValid(brandEntity)) {
-            this.validationUtil
-                    .violations(brandEntity)
-                    .stream()
-                    .map(ConstraintViolation::getMessage)
-                    .forEach(System.out::println);
-
-        } else {
+    public AddBrandDto addBrand(AddBrandDto brandEntity) {
             try {
                 Brand brandEx = modelMapper.map(brandEntity, Brand.class);
-
-                    return modelMapper.map(brandRepository
-                            .saveAndFlush(this.modelMapper.map(brandEntity, Brand.class)), BrandDto.class);
-
+                    brandEx.setCreated(LocalDateTime.now());
+                    brandEx.setModified(LocalDateTime.now());
+                    brandRepository
+                            .saveAndFlush(brandEx);
+                return modelMapper.map(brandEx, AddBrandDto.class);
             } catch (Exception e) {
                 System.out.println("Some thing went wrong!");
             }
-        }
         return brandEntity;
     }
 

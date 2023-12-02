@@ -14,10 +14,6 @@ public class Brand extends BaseEntity{
 
     public String name;
 
-    public LocalDate created;
-
-    public LocalDate modified;
-
     private List<Model> models;
 
     protected Brand() {
@@ -33,15 +29,4 @@ public class Brand extends BaseEntity{
 
     protected void setName(String name) { this.name = name;}
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "created", nullable = false)
-    public LocalDate getCreated() {return created;}
-
-    protected void setCreated(LocalDate created) {this.created = created;}
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "modified", nullable = false)
-    public LocalDate getModified() {return modified;}
-
-    public void setModified(LocalDate modified) {this.modified = modified;}
 }

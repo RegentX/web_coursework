@@ -1,24 +1,20 @@
 package com.example.springdatabasicdemo.services.impl;
 
-import ch.qos.logback.core.model.Model;
-import com.example.springdatabasicdemo.dtos.RoleDto;
+import com.example.springdatabasicdemo.dtos.OfferDto;
 import com.example.springdatabasicdemo.dtos.UserDto;
 import com.example.springdatabasicdemo.enums.UserRole;
-import com.example.springdatabasicdemo.models.Role;
+import com.example.springdatabasicdemo.models.Offer;
 import com.example.springdatabasicdemo.models.User;
-import com.example.springdatabasicdemo.repositories.RoleRepository;
 import com.example.springdatabasicdemo.repositories.UserRepository;
 import com.example.springdatabasicdemo.services.UserService;
-import com.example.springdatabasicdemo.util.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,11 +22,6 @@ public class UserServiceImpl implements UserService {
     ModelMapper modelMapper;
 
     UserRepository userRepository;
-
-    ValidationUtil validationUtil;
-
-    @Autowired
-    public void setValidationUtil(ValidationUtil validationUtil) {this.validationUtil = validationUtil;}
 
     @Autowired
     public void setModelMapper(ModelMapper modelMapper) {this.modelMapper = modelMapper;}
@@ -42,15 +33,22 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDto registerUser(UserDto userEntity) {
-        if (!this.validationUtil.isValid(userEntity)) {
-            this.validationUtil
-                    .violations(userEntity)
-                    .stream()
-                    .map(ConstraintViolation::getMessage)
-                    .forEach(System.out::println);
+    public Optional<List<UserDto>> getAllUsers() {
+        List<User> users = userRepository.findAll();
 
-        } else {
+        if (!users.isEmpty()) {
+            List<UserDto> userDtos = users.stream()
+                    .map(user -> modelMapper.map(user, UserDto.class))
+                    .collect(Collectors.toList());
+
+            return Optional.of(userDtos);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public UserDto registerUser(UserDto userEntity) {
             try {
                 User userEx = modelMapper.map(userEntity, User.class);
 
@@ -60,8 +58,6 @@ public class UserServiceImpl implements UserService {
             } catch (Exception e) {
                 System.out.println("Some thing went wrong!");
             }
-        }
-
         return userEntity;
     }
 

@@ -17,15 +17,11 @@ public class User extends BaseEntity {
 
     private boolean isActive;
 
-    private LocalDate created;
-
     private String firstName;
 
     private String imageUrl;
 
     private String lastName;
-
-    private LocalDate modified;
 
     private String userPassword;
 
@@ -37,19 +33,6 @@ public class User extends BaseEntity {
 
     protected User() {}
 
-    public User(boolean isActive, LocalDate created, String firstName, String imageUrl, String lastName, LocalDate modified, String userPassword, String userName, Role role, List<Offer> offers) {
-        this.isActive = isActive;
-        this.created = created;
-        this.firstName = firstName;
-        this.imageUrl = imageUrl;
-        this.lastName = lastName;
-        this.modified = modified;
-        this.userPassword = userPassword;
-        this.username = userName;
-        this.role = role;
-        this.offers = offers;
-    }
-
     @Column(name = "is_active", nullable = false)
     public boolean getIsActive() {
         return isActive;
@@ -57,16 +40,6 @@ public class User extends BaseEntity {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
-    }
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "created", nullable = false)
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDate created) {
-        this.created = created;
     }
 
     @Column(name = "first_name", nullable = false)
@@ -96,16 +69,6 @@ public class User extends BaseEntity {
         this.lastName = lastName;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "modified", nullable = false)
-    public LocalDate getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDate modified) {
-        this.modified = modified;
-    }
-
     @Column(name = "user_password", nullable = false)
     public String getUserPassword() {
         return userPassword;
@@ -115,7 +78,7 @@ public class User extends BaseEntity {
         this.userPassword = userPassword;
     }
 
-    @Column(name = "username", nullable = false)
+    @Column(unique = true, name = "username", nullable = false)
     public String getUsername() {
         return username;
     }

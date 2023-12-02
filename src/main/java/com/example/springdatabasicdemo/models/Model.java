@@ -23,10 +23,6 @@ public class Model extends BaseEntity {
 
     private int endYear;
 
-    private LocalDate created;
-
-    private LocalDate modified;
-
     private Brand brand;
 
     private List<Offer> offers;
@@ -78,26 +74,6 @@ public class Model extends BaseEntity {
 
     public void setEndYear(int endYear) {
         this.endYear = endYear;
-    }
-
-    @Temporal(TemporalType.DATE) //change to DateTime
-    @Column(name = "created", nullable = false)
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    protected void setCreated(LocalDate created) {
-        this.created = created;
-    }
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "modified", nullable = false)
-    public LocalDate getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDate modified) {
-        this.modified = modified;
     }
 
     @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

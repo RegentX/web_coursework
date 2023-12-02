@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface UserService {
 
+    Optional<List<UserDto>> getAllUsers();
+
     UserDto registerUser(UserDto user);
 
     Optional<UserDto> getUserById(String id);
