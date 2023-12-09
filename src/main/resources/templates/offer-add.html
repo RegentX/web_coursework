@@ -7,28 +7,165 @@
     <div class="container">
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
-                <div class="justify-content-center">
+            <div class="jumbotron rounded col-md-8 pt-5">
+                <div class="justify-content-center" style="display: flex; justify-content: center">
                     <h1>Add Offer</h1>
                 </div>
-                <form th:action="@{/offer/create}"
+                <form th:action="@{/offers/create}"
                       th:method="post"
                       th:object="${offerModel}"
                       class="m-md-auto w-50 pb-3">
                     <div class="mb-3">
-                        <label class="form-label" for="modelName">Name</label>
-                        <input th:field="*{modelName}"
-                               th:errorclass="is-invalid"
-                               type="text" class="form-control text-center" id="modelName"
-                               aria-describedby="nameHelp" name="modelName"/>
+                        <label class="form-label brand-name-drop" style="display: flex; justify-content: center; font-weight: bold" for="modelName">Model name</label>
+                        <select th:field="*{modelName}" th:errorclass="is-invalid" type="text" class="form-select text-center" id="modelName"
+                                aria-describedby="nameHelp" name="modelName">
+                            <option value="">-- Select an option --</option>
+                            <option th:each="m : ${modelList}"
+                                    th:value="${m.name}"
+                                    th:text="${m.name}">
+                            </option>
+                        </select>
                         <small th:if="${#fields.hasErrors('modelName')}" th:errors="*{modelName}" class="text-danger">Error message</small>
-                    </div>
 
-                    <button type="submit" class="btn btn-secondary">Add Offer</button>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label brand-name-drop" style="display: flex; justify-content: center; font-weight: bold" for="userName">User name </label>
+                        <select th:field="*{userName}" th:errorclass="is-invalid" type="text" class="form-select text-center" id="userName"
+                                aria-describedby="nameHelp" name="userName">
+                            <option value="">-- Select an option --</option>
+                            <option th:each="u : ${userList}"
+                                    th:value="${u.username}"
+                                    th:text="${u.username}">
+                            </option>
+                        </select>
+                        <small th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="text-danger">Error message</small>
+
+                    </div>
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label class="form-label" for="description">Description</label>
+                        <textarea th:field="*{description}" class="form-control" id="description"></textarea>
+                        <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger">Error message</small>
+                    </div>
+                    <!-- Engine -->
+                    <fieldset class="">
+                        <label style="display: flex; justify-content: center; font-weight: bold">Choose Transmission</label>
+                        <div style="margin: 0 40%">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input th:field="*{transmission}"
+                                           th:value="MANUAL"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input" name="transmission"/>
+                                    <span>Manual</span>
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <label class="form-check-label">
+                                    <input th:field="*{transmission}"
+                                           th:value="AUTOMATIC"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input" name="transmission"/>
+                                    <span>Automatic</span>
+                                </label>
+                            </div>
+                            <small th:if="${#fields.hasErrors('transmission')}" th:errors="*{transmission}"
+                                   class="text-danger">Error message</small>
+                        </div>
+
+                    </fieldset>
+                    <!-- Image URL -->
+                    <div class="mb-3">
+                        <label class="form-label" for="photoInput">Image URL</label>
+                        <input th:field="*{imageUrl}" type="text" class="form-control" id="photoInput" onchange="previewImage()"/>
+                        <img id="photoPreview" src="#" alt="Photo Preview" style="display:none; max-width: 100%; height: auto; margin-top: 20px;"/>
+                        <small th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}" class="text-danger">Error message</small>
+                    </div>
+                    <!-- Mileage -->
+                    <div class="mb-3">
+                        <label class="form-label" for="mileage">Mileage</label>
+                        <input th:field="*{mileage}" type="number" class="form-control" id="mileage"/>
+                        <small th:if="${#fields.hasErrors('mileage')}" th:errors="*{mileage}" class="text-danger">Error message</small>
+                    </div>
+                    <!-- Price -->
+                    <div class="mb-3">
+                        <label class="form-label" for="price">Price</label>
+                        <input th:field="*{price}" type="number" class="form-control" id="price"/>
+                        <small th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger">Error message</small>
+                    </div>
+                    <!-- Transmission -->
+                    <fieldset class="">
+                        <label style="display: flex; justify-content: center; font-weight: bold">Choose Category</label>
+                        <div style="margin: 0 40%">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input th:field="*{engine}"
+                                           th:value="GASOLINE"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input" name="category"/>
+                                    <span>Gasoline</span>
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <label class="form-check-label">
+                                    <input th:field="*{engine}"
+                                           th:value="DIESEL"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input" name="category"/>
+                                    <span>Diesel</span>
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <label class="form-check-label">
+                                    <input th:field="*{engine}"
+                                           th:value="ELECTRIC"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input " name="category"/>
+                                    <span>Electric</span>
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <label class="form-check-label">
+                                    <input th:field="*{engine}"
+                                           th:value="HYBRID"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input " name="category"/>
+                                    <span>Hybrid</span>
+                                </label>
+                            </div>
+                            <small th:if="${#fields.hasErrors('engine')}" th:errors="*{engine}"
+                                   class="text-danger">Error message</small>
+                        </div>
+
+                    </fieldset>
+                    <!-- Offer Year -->
+                    <div class="mb-3">
+                        <label class="form-label" for="offerYear">Offer Year</label>
+                        <input th:field="*{offerYear}" type="number" class="form-control" id="offerYear"/>
+                        <small th:if="${#fields.hasErrors('offerYear')}" th:errors="*{offerYear}" class="text-danger">Error message</small>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="button-container" style="display: flex; justify-content: center;">
+                        <button type="submit" class="btn btn-secondary">Add Offer</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </main>
+<script>
+    function previewImage() {
+        var input = document.getElementById('photoInput');
+        var preview = document.getElementById('photoPreview');
+
+        preview.src = input.value;
+
+        if (input.value) {
+            preview.style.display = 'block';
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
-public class OfferDto {
+public class AddOfferDto {
 
     private String modelName;
 
@@ -33,11 +33,6 @@ public class OfferDto {
     private Transmission transmission;
 
     private int offerYear;
-
-
-    public OfferDto() {
-
-    }
 
     @NotEmpty(message = "Model name cannot be null or empty!")
     @Length(min = 1, message = "Model name should be at least 1 characters long!")
@@ -59,7 +54,6 @@ public class OfferDto {
         this.userName = userName;
     }
 
-    @NotNull
     @NotEmpty(message = "Description cannot be null or empty!")
     @Size(min = 1, max=100, message = "Description should be at least 1 characters long!")
     public String getDescription() {

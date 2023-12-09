@@ -1,34 +1,98 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header"/>
+<link>
 <body class="d-flex flex-column h-100">
 <div th:replace="fragments/navbar">Navbar</div>
 <main class="flex-shrink-0">
     <div class="container">
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
-                <div class="justify-content-center" >
+            <div class="jumbotron rounded col-md-8 pt-5">
+                <div class="justify-content-center" style="display: flex; justify-content: center">
                     <h1>Add User</h1>
                 </div>
-                <form th:action="@{/user/create}"
+                <form th:action="@{/users/create}"
                       th:method="post"
                       th:object="${userModel}"
                       class="m-md-auto w-50 pb-3">
                     <div class="mb-3">
-                        <label class="form-label" for="username">Name</label>
+                        <label class="form-label" style="display: flex; justify-content: center; font-weight: bold" for="firstName">First Name</label>
+                        <input th:field="*{firstName}"
+                               th:errorclass="is-invalid"
+                               type="text" class="form-control text-center" id="firstName"
+                               aria-describedby="nameHelp" name="firstName"/>
+                        <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger">Error message</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="display: flex; justify-content: center; font-weight: bold" for="lastName">Last Name</label>
+                        <input th:field="*{lastName}"
+                               th:errorclass="is-invalid"
+                               type="text" class="form-control text-center" id="lastName"
+                               aria-describedby="nameHelp" name="lastName"/>
+                        <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger">Error message</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="display: flex; justify-content: center; font-weight: bold" for="username">Nickname</label>
                         <input th:field="*{username}"
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center" id="username"
-                               aria-describedby="nameHelp" name="username"/>
+                               aria-describedby="nameHelp" name="username" placeholder="@user"/>
                         <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Error message</small>
                     </div>
-
-                    <button type="submit" class="btn btn-secondary">Add User</button>
-                </form>
+                    <div class="mb-3" style="margin-top: 2%">
+                        <label class="form-label" style="display: flex; justify-content: center; font-weight: bold" for="photoInput">Image</label>
+                        <input th:field="*{imageUrl}"
+                               th:value="*{imageUrl}"
+                               th:errorclass="is-invalid" type="text" class="form-control" id="photoInput" onchange="previewImage()">
+                        <img id="photoPreview" src="#" alt="Photo Preview" style="display:none; max-width: 100%; height: auto; margin-top: 20px;"/>
+                        <small th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"
+                               class="text-danger">Error message</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="display: flex; justify-content: center; font-weight: bold" for="userPassword">Password</label>
+                        <input th:field="*{userPassword}"
+                               th:errorclass="is-invalid"
+                               type="password" class="form-control text-center" id="userPassword"
+                               aria-describedby="nameHelp" name="userPassword" placeholder="Qwerty12345"/>
+                        <small th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" class="text-danger">Error message</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="role"><h5>Role</h5></label>
+                        <select multiple="false" class="form-control text-center"
+                                id="role" name="role" th:field="*{role}">
+                            <option th:each="r : ${roleList}"
+                                    th:value="${r.roleName}"
+                                    th:text="${r.roleName}">Role name
+                            </option>
+                        </select>
+                        <small th:if="${#fields.hasErrors('role')}" th:errors="*{role}"
+                               class="text-danger">Error
+                            message</small>
+                    </div>
+                    <div class="button-container" style="display: flex; justify-content: center;">
+                        <button type="submit" class="btn btn-secondary">Add User</button>
+                    </div>
+                    </form>
             </div>
         </div>
     </div>
 </main>
+    <script>
+        function previewImage() {
+        var input = document.getElementById('photoInput');
+        var preview = document.getElementById('photoPreview');
+
+        preview.src = input.value;
+
+        if (input.value) {
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+    }
+</script>
+
+
 </body>
 </html>

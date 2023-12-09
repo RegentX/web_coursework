@@ -1,8 +1,11 @@
 package com.example.springdatabasicdemo.controllers;
 
+import com.example.springdatabasicdemo.dtos.AddModelDto;
+import com.example.springdatabasicdemo.dtos.AddUserDto;
 import com.example.springdatabasicdemo.dtos.RoleDto;
 import com.example.springdatabasicdemo.dtos.UserDto;
 import com.example.springdatabasicdemo.enums.UserRole;
+import com.example.springdatabasicdemo.services.OfferService;
 import com.example.springdatabasicdemo.services.RoleService;
 import com.example.springdatabasicdemo.services.UserService;
 import jakarta.validation.Valid;
@@ -20,27 +23,38 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
+    @Autowired
     private UserService userService;
 
     @Autowired
-    public void setService(UserService userService) {
-        this.userService = userService;
+    private RoleService roleService;
+
+    @Autowired
+    private OfferService offerService;
+
+    public UserController(RoleService roleService, UserService userService, OfferService offerService) {
+        this.roleService = roleService;
     }
 
     @GetMapping("/add")
-    public String addUser() {return "user-add";}
+    public String addUser(Model model) {
+        model.addAttribute("roleList", roleService.getAllRoles());
+        return "user-add";
+    }
 
     @ModelAttribute("userModel")
-    public UserDto initUser() {return new UserDto();}
+    public AddUserDto initUser() {return new AddUserDto();}
 
     @PostMapping("/create")
-    public String createUser(@Valid UserDto userModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String createUser(@Valid AddUserDto userModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("userModel", userModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModel", bindingResult);
             return "redirect:/users/add";
         }
+        System.out.print(userModel.getImageUrl());
+        System.out.print("---------");
         userService.registerUser(userModel);
 
         return "redirect:/users/all";
@@ -53,6 +67,36 @@ public class UserController {
         return "user-all";
     }
 
+    @GetMapping("/user-details/{user-name}")
+    public String UserDetails(@PathVariable("user-name") String userName, Model model) {
+        model.addAttribute("userDetails", userService.getUserByUsername(userName));
+        model.addAttribute("offerDetails", offerService.getOffersBySeller(userName));
+        return "user-detail";
+    }
+
+    @GetMapping("/user-edit/{userName}")
+    public String editUserSend(@PathVariable String userName, Model model) {
+        model.addAttribute("roleList", roleService.getAllRoles());
+
+        model.addAttribute("user", userService.getUserByUsername(userName));
+        return "user-edit";
+    }
+
+    @PostMapping("/user-edit/{userName}")
+    public String editUserSubmit(@PathVariable String userName, @Valid AddUserDto userDto, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
+        model.addAttribute("roleList", roleService.getAllRoles());
+
+        if (result.hasErrors()) {
+            model.addAttribute("user", userDto);
+
+            return "user-edit";
+        }
+
+        userService.editUser(userName, userDto);
+        return "redirect:/users/all";
+    }
+
     @GetMapping("/user/{userId}")
     public Optional<UserDto> getUserById(@PathVariable String userId) {
         return userService.getUserById(userId);
@@ -63,9 +107,16 @@ public class UserController {
         return userService.getUsersByRole(roleName);
     }
 
-    @PutMapping("/{userId}/password")
-    public void updateUserPassword(@PathVariable String userId, @RequestParam String userPassword) {
-        userService.updateUserPassword(userPassword, userId);
+    @PostMapping("/update/password/{userName}/{userPassword}")
+    public String updateUserPassword(@PathVariable String userName, @PathVariable String userPassword) {
+        userService.updateUserPassword(userPassword, userName);
+        return "redirect:/users/all";
+    }
+
+    @PostMapping("/delete/user/{userName}")
+    public String deleteUserByUserName(@PathVariable String userName) {
+        userService.deleteUserByUserName(userName);
+        return "redirect:/users/all";
     }
 
     @GetMapping("delete/id/{id}")

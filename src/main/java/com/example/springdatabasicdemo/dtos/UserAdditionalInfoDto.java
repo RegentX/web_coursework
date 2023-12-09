@@ -13,13 +13,12 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class UserDto {
-
-    private boolean isActive;
+public class UserAdditionalInfoDto {
 
     private String firstName;
 
@@ -33,19 +32,10 @@ public class UserDto {
 
     private UserRole role;
 
-    public UserDto() {}
+    private LocalDateTime created;
 
-    @NotNull(message = "Please choose a status of user!")
-    public boolean getIsActive() {
-        return isActive;
-    }
+    private boolean isActive;
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    @NotEmpty
-    @Length(min = 2, message = "First name must be more than 2 characters!")
     public String getFirstName() {
         return firstName;
     }
@@ -54,8 +44,6 @@ public class UserDto {
         this.firstName = firstName;
     }
 
-    @NotEmpty(message = "Image url cannot be null or empty!")
-    @Length(min = 2, message = "URL of image must be more than 10 characters!")
     public String getImageUrl() {
         return imageUrl;
     }
@@ -64,8 +52,6 @@ public class UserDto {
         this.imageUrl = imageUrl;
     }
 
-    @NotEmpty
-    @Length(min = 2, message = "Last name must be more than 2 characters!")
     public String getLastName() {
         return lastName;
     }
@@ -74,8 +60,6 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    @NotEmpty
-    @Length(min = 8, message = "Password must be more than 8 characters!")
     public String getUserPassword() {
         return userPassword;
     }
@@ -84,8 +68,6 @@ public class UserDto {
         this.userPassword = userPassword;
     }
 
-    @NotEmpty
-    @Length(min = 5, message = "User name must be more than 5 characters!")
     public String getUsername() {
         return username;
     }
@@ -100,6 +82,22 @@ public class UserDto {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
 }

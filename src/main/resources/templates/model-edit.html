@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header"/>
+<link>
+<body class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="jumbotron rounded col-md-8 pt-5">
+        <div class="justify-content-center" style="display: flex; justify-content: center">
+          <h1>Add Model</h1>
+        </div>
+        <form th:action="@{|/models/model-edit/${model.getName()}/${model.getBrand()}|}"
+              th:method="post"
+              th:object="${model}"
+              class="m-md-auto w-50 pb-3">
+          <div class="mb-3">
+            <label class="form-label" style="display: flex; justify-content: center; font-weight: bold" for="name">Name</label>
+            <input th:field="*{name}"
+                   th:errorclass="is-invalid"
+                   type="text" class="form-control text-center" id="name"
+                   aria-describedby="nameHelp" name="name"/>
+            <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Error message</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label brand-name-drop" style="display: flex; justify-content: center; font-weight: bold" for="brand">Brand name </label>
+            <select th:field="*{brand}" th:errorclass="is-invalid" type="text" class="form-select text-center" id="brand"
+                    aria-describedby="nameHelp" name="brand">
+              <option value="">-- Select an option --</option>
+              <option th:each="b : ${brandList}"
+                      th:value="${b.getName()}"
+                      th:text="${b.getName()}">
+              </option>
+            </select>
+            <small th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" class="text-danger">Error message</small>
+
+          </div>
+          <fieldset class="">
+            <label style="display: flex; justify-content: center; font-weight: bold">Choose Category</label>
+            <div style="margin: 0 40%">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input th:field="*{category}"
+                         th:value="Car"
+                         th:errorclass="is-invalid"
+                         type="radio" class="form-check-input" name="category"/>
+                  <span>Car</span>
+                </label>
+              </div>
+              <div class="form-check disabled">
+                <label class="form-check-label">
+                  <input th:field="*{category}"
+                         th:value="Bus"
+                         th:errorclass="is-invalid"
+                         type="radio" class="form-check-input" name="category"/>
+                  <span>Bus</span>
+                </label>
+              </div>
+              <div class="form-check disabled">
+                <label class="form-check-label">
+                  <input th:field="*{category}"
+                         th:value="Truck"
+                         th:errorclass="is-invalid"
+                         type="radio" class="form-check-input " name="category"/>
+                  <span>Truck</span>
+                </label>
+              </div>
+              <div class="form-check disabled">
+                <label class="form-check-label">
+                  <input th:field="*{category}"
+                         th:value="Motorcycle"
+                         th:errorclass="is-invalid"
+                         type="radio" class="form-check-input " name="category"/>
+                  <span>Motorcycle</span>
+                </label>
+              </div>
+              <small th:if="${#fields.hasErrors('category')}" th:errors="*{category}"
+                     class="text-danger">Error message</small>
+            </div>
+
+          </fieldset>
+          <!--                    <div class="mb-3">-->
+          <!--                        <label class="form-label" for="imageUrl">URL Of image</label>-->
+          <!--                        <input th:field="*{imageUrl}"-->
+          <!--                               th:errorclass="is-invalid"-->
+          <!--                               type="text" class="form-control text-center"-->
+          <!--                               id="imageUrl" aria-describedby="imageUrl" name="imageURL"/>-->
+          <!--                        -->
+          <!--                        <small th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}" class="text-danger">Error-->
+          <!--                            message</small>-->
+          <!--                    </div>-->
+          <div class="mb-3" style="margin-top: 2%">
+            <label class="form-label" style="display: flex; justify-content: center; font-weight: bold" for="photoInput">Image</label>
+            <input th:field="*{imageUrl}"
+                   th:value="*{imageUrl}"
+                   th:errorclass="is-invalid" type="text" class="form-control" id="photoInput" onchange="previewImage()">
+            <img id="photoPreview" src="#" alt="Photo Preview" style="display:none; max-width: 100%; height: auto; margin-top: 20px;"/>
+            <small th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"
+                   class="text-danger">Error message</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="startYear">Start Year</label>
+            <input th:field="*{startYear}"
+                   th:errorclass="is-invalid" type="text" class="form-control text-center"
+                   id="startYear" aria-describedby="startYear" name="startYear"/>
+            <small th:if="${#fields.hasErrors('startYear')}" th:errors="*{startYear}" class="text-danger">Error
+              message</small>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="endYear">End Year</label>
+            <input th:field="*{endYear}"
+                   th:errorclass="is-invalid" type="text" class="form-control text-center"
+                   id="endYear" aria-describedby="endYear" name="endYear"/>
+            <small th:if="${#fields.hasErrors('endYear')}" th:errors="*{endYear}" class="text-danger">Error
+              message</small>
+          </div>
+
+          <div class="button-container" style="display: flex; justify-content: center;">
+            <button type="submit" class="btn btn-secondary">Submit Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  function previewImage() {
+    var input = document.getElementById('photoInput');
+    var preview = document.getElementById('photoPreview');
+
+    preview.src = input.value;
+
+    if (input.value) {
+      preview.style.display = 'block';
+    } else {
+      preview.style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>

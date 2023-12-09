@@ -17,9 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class UserDto {
-
-    private boolean isActive;
+public class AddUserDto {
 
     private String firstName;
 
@@ -33,18 +31,7 @@ public class UserDto {
 
     private UserRole role;
 
-    public UserDto() {}
-
-    @NotNull(message = "Please choose a status of user!")
-    public boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    @NotEmpty
+    @NotEmpty(message = "User first name cannot be null or empty!")
     @Length(min = 2, message = "First name must be more than 2 characters!")
     public String getFirstName() {
         return firstName;
@@ -64,7 +51,7 @@ public class UserDto {
         this.imageUrl = imageUrl;
     }
 
-    @NotEmpty
+    @NotEmpty(message = "User last name cannot be null or empty!")
     @Length(min = 2, message = "Last name must be more than 2 characters!")
     public String getLastName() {
         return lastName;
@@ -74,7 +61,7 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    @NotEmpty
+    @NotEmpty(message = "User password name cannot be null or empty!")
     @Length(min = 8, message = "Password must be more than 8 characters!")
     public String getUserPassword() {
         return userPassword;
@@ -84,7 +71,7 @@ public class UserDto {
         this.userPassword = userPassword;
     }
 
-    @NotEmpty
+    @NotEmpty(message = "User nickname cannot be null or empty!")
     @Length(min = 5, message = "User name must be more than 5 characters!")
     public String getUsername() {
         return username;

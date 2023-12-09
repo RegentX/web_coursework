@@ -1,7 +1,10 @@
 package com.example.springdatabasicdemo.controllers;
 
+import com.example.springdatabasicdemo.dtos.AddModelDto;
+import com.example.springdatabasicdemo.dtos.BrandDto;
 import com.example.springdatabasicdemo.dtos.ModelDto;
 import com.example.springdatabasicdemo.enums.Category;
+import com.example.springdatabasicdemo.services.BrandService;
 import com.example.springdatabasicdemo.services.ModelService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +21,29 @@ import java.util.Optional;
 @RequestMapping("/models")
 public class ModelController {
 
-    private ModelService modelService;
+    @Autowired
+    private final BrandService brandService;
 
     @Autowired
-    public void setService(ModelService modelService) {
+    private final ModelService modelService;
+    public ModelController(BrandService brandService, ModelService modelService) {
+        this.brandService = brandService;
         this.modelService = modelService;
     }
+// Why don't to use this ?
+@GetMapping("/add")
+public String addModel(Model model) {
+    model.addAttribute("availableBrands", brandService.getAllBrands());
 
-    @GetMapping("/add")
-    public String addModel() {return "model-add";}
+    return "model-add";}
 
     @ModelAttribute("modelModel")
-    public ModelDto initModel() {return new ModelDto();}
+    public AddModelDto initModel() {return new AddModelDto();}
+
 
     @PostMapping("/create")
-    public String createModel(@Valid ModelDto modelModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
+    public String createModel(@Valid AddModelDto modelModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        System.out.println(modelModel.getBrand());
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("modelModel", modelModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.modelModel", bindingResult);
@@ -47,7 +57,6 @@ public class ModelController {
     @GetMapping("/all")
     public String showAllModels(Model model) {
         model.addAttribute("modelList", modelService.getAllModels());
-
         return "model-all";
     }
 
@@ -72,15 +81,49 @@ public class ModelController {
         return "redirect:/model-edit/" + modelName;
     }
 
+    @GetMapping("/model-edit/{modelName}/{brandName}")
+    public String editModelSend(@PathVariable String modelName, @PathVariable String brandName, Model model) {
+        model.addAttribute("brandList", brandService.getAllBrands());
+
+        model.addAttribute("model", modelService.getModelByBrandAndName(brandName, modelName));
+        return "model-edit";
+    }
+
+    @PostMapping("/model-edit/{modelName}/{brandName}")
+    public String editModelSubmit(@PathVariable String modelName, @PathVariable String brandName, @Valid AddModelDto modelDto, BindingResult result, Model model) {
+
+        model.addAttribute("brandList", brandService.getAllBrands());
+        if (result.hasErrors()) {
+            model.addAttribute("model", modelDto);
+            return "model-edit";
+        }
+
+        modelService.editModel(modelName, brandName, modelDto);
+        return "redirect:/models/all";
+    }
+
     @PostMapping("/model-update/image/{modelId}")
     public void addModelImage(@PathVariable String modelId, @RequestParam String imageUrl) {
         modelService.addModelImage(imageUrl, modelId);
     }
 
+    @PostMapping("/delete/model/{brandName}/{modelName}")
+    public String deleteModelByBrandAndName(@PathVariable String brandName, @PathVariable String modelName) {
+        modelService.deleteModelByBrandAndName(brandName, modelName);
+        return "redirect:/models/all";
+    }
+
+    @GetMapping("/model-details/{modelName}/{brandName}")
+    public String ModelDetails(@PathVariable String modelName, @PathVariable String brandName, Model model) {
+        model.addAttribute("modelDetails", modelService.getModelByBrandAndName(brandName, modelName));
+
+        return "model-detail";
+    }
+
     @GetMapping("/delete/{modelId}")
     public String deleteModelById(@PathVariable("modelId") String modelId) {
         modelService.deleteModelById(modelId);
-        return "redirect:/models/model/all";
+        return "redirect:/models/all";
     }
 
 }

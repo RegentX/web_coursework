@@ -21,6 +21,8 @@ public interface OfferRepository extends JpaRepository<Offer, String> {
 
     Offer findOfferBySeller(User seller);
 
+    Offer findOfferByModelAndSeller(Model model, User user);
+
     List<Offer> findOffersByPriceLessThan(BigDecimal price);
 
     Offer findOfferByOfferYear(int offerYear);
@@ -40,6 +42,8 @@ public interface OfferRepository extends JpaRepository<Offer, String> {
     List<Offer> findOffersByPrice(BigDecimal price);
 
     List<Offer> findOffersByCreated(Date created);
+
+    void deleteOfferByModelAndSeller(Model model, User user);
 
     Offer deleteOfferById(String id);
 

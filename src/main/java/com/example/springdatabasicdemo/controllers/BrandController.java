@@ -48,12 +48,13 @@ public class BrandController {
         return "brand-all";
     }
 
-    @DeleteMapping("/delete-brand/{brandName}")
-    public void deleteBrandByName(@PathVariable String brandName) {
+    @PostMapping("/delete/brand/{brandName}")
+    public String deleteBrandByName(@PathVariable String brandName) {
         brandService.deleteBrandByName(brandName);
+        return "redirect:/brands/all";
     }
 
-    @GetMapping("delete/id/{id}")
+    @DeleteMapping("delete/id/{id}")
     public String deleteBrandById(@PathVariable("id") String brandId) {
         brandService.deleteBrandById(brandId);
         return "redirect:/brands/all";

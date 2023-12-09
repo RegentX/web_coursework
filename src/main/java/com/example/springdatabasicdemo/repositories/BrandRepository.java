@@ -23,9 +23,9 @@ public interface BrandRepository extends JpaRepository<Brand, String> {
 
     List<Brand> findBrandsByName(String name);
 
-    Brand deleteBrandById(String id);
+    void deleteBrandById(String id);
 
-    Brand deleteBrandByName(String name);
+    void deleteBrandByName(String name);
 }
 
 

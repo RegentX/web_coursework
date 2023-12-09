@@ -1,9 +1,6 @@
 package com.example.springdatabasicdemo.controllers;
 
-import com.example.springdatabasicdemo.dtos.BrandDto;
-import com.example.springdatabasicdemo.dtos.ModelDto;
-import com.example.springdatabasicdemo.dtos.OfferDto;
-import com.example.springdatabasicdemo.dtos.UserDto;
+import com.example.springdatabasicdemo.dtos.*;
 import com.example.springdatabasicdemo.enums.Engine;
 import com.example.springdatabasicdemo.models.Offer;
 import com.example.springdatabasicdemo.services.ModelService;
@@ -29,18 +26,31 @@ public class OfferController {
 
     @Autowired
     private final OfferService offerService;
-    public OfferController(OfferService offerService) {
+
+    @Autowired
+    private final UserService userService;
+
+    @Autowired
+    private final ModelService modelService;
+
+    public OfferController(OfferService offerService, UserService userService, ModelService modelService) {
         this.offerService = offerService;
+        this.userService = userService;
+        this.modelService = modelService;
     }
 
     @GetMapping("/add")
-    public String addOffer() {return "offer-add";}
+    public String addOffer(Model model) {
+        model.addAttribute("userList", userService.getAllUsers());
+        model.addAttribute("modelList", modelService.getAllModels());
+        return "offer-add";
+    }
 
     @ModelAttribute("offerModel")
     public OfferDto initOffer() {return new OfferDto();}
 
     @PostMapping("/create")
-    public String createOffer(@Valid OfferDto offerModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String createOffer(@Valid AddOfferDto offerModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("offerModel", offerModel);
@@ -49,7 +59,7 @@ public class OfferController {
         }
         offerService.createNewOffer(offerModel);
 
-        return "redirect:/";
+        return "redirect:/offers/all";
     }
 
     @GetMapping("/all")
@@ -66,18 +76,6 @@ public class OfferController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/add")
-    public String createNewOffer(@Valid OfferDto offerDto, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            attributes.addFlashAttribute("offerModel", offerDto);
-            attributes.addFlashAttribute("org.springframework.validation.BindingResult.offerModel",
-                    result);
-            return "redirect:/offers/all";
-        }
-        offerService.createNewOffer(offerDto);
-        return "redirect:/offers/all";
-    }
-
     @GetMapping("/priceLessThan/{price}")
     public Optional<List<OfferDto>> getOffersLessThanPrice(@PathVariable BigDecimal price) {
         return offerService.getOffersLessThanPrice(price);
@@ -86,6 +84,18 @@ public class OfferController {
     @PutMapping("/update-offer/description/{offerId}")
     public void updateOfferDescription(@PathVariable String offerId, @RequestParam String description) {
         offerService.updateOfferDescription(description, offerId);
+    }
+
+    @GetMapping("/offer-details/{modelName}/{userName}")
+    public String OfferDetails(@PathVariable String modelName, @PathVariable String userName, Model model) {
+        model.addAttribute("offerDetails",offerService.getOfferBySellerAndModel(modelName, userName));
+        return "offer-detail";
+    }
+
+    @PostMapping("/update/price/{price}")
+    public String updateOfferPrice(@PathVariable BigDecimal price) {
+
+        return "redirect:/offers/all";
     }
 
     @GetMapping("delete/id/{id}")
@@ -97,5 +107,11 @@ public class OfferController {
     @DeleteMapping("/delete-offer/seller")
     public Boolean deleteOffersBySeller(@RequestBody UserDto sellerDto) {
         return offerService.deleteOffersBySeller(sellerDto);
+    }
+
+    @PostMapping("/delete/offer/{modelName}/{userName}")
+    public String deleteOfferByUserAndModel(@PathVariable String modelName, @PathVariable String userName) {
+        offerService.deleteOfferByModelAndSeller(modelName, userName);
+        return "redirect:/offers/all";
     }
 }

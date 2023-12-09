@@ -12,7 +12,7 @@ public interface BrandService {
 
     AddBrandDto addBrand(AddBrandDto brand);
 
-    List<BrandDto> getAllBrands();
+    List<AddBrandDto> getAllBrands();
 
     void deleteBrandByName(String brandName);
 

@@ -9,12 +9,11 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ModelDto {
+public class AddModelDto {
 
     private String brand;
 
@@ -27,10 +26,6 @@ public class ModelDto {
     private int startYear;
 
     private int endYear;
-
-    private LocalDateTime created;
-
-    private LocalDateTime modified;
 
     @NotEmpty(message = "Name of model name cannot be null or empty!")
     @Length(min = 2, message = "Name of model name should be at least 2 characters long!")
@@ -51,7 +46,6 @@ public class ModelDto {
         this.category = category;
     }
 
-    @NotNull
     @NotEmpty(message = "Image url cannot be null or empty!")
     @Length(min = 10, max = 255, message = "URL of image must be more than 10 characters!")
     public String getImageUrl() {
@@ -63,7 +57,7 @@ public class ModelDto {
     }
 
     @Min(value = 1880, message = "Start year must be a year after 1880!")
-    @NotEmpty(message = "Start year must not be null or empty!")
+    @NotNull(message = "Start year must not be null or empty!")
     public int getStartYear() {
         return startYear;
     }
@@ -80,24 +74,6 @@ public class ModelDto {
 
     public void setEndYear(int endYear) {
         this.endYear = endYear;
-    }
-
-    @NotNull(message = "Date of creation cannot be null or empty!")
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    @NotNull(message = "Date of modification cannot be null or empty!")
-    public LocalDateTime getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
     }
 
     @NotEmpty(message = "Brand name cannot be null or empty!")

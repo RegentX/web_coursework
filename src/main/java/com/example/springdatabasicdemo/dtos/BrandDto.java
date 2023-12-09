@@ -22,9 +22,6 @@ public class BrandDto {
 
         public LocalDate modified;
 
-        public BrandDto() {
-        }
-
         @NotEmpty(message = "Name of brand cannot be null or empty!")
         @Size(min = 2, message = "Name of brand must be more than 2 characters!")
         public String getName() {return name;}

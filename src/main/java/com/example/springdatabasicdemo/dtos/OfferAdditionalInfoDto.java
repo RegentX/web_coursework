@@ -12,9 +12,10 @@ import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
-public class OfferDto {
+public class OfferAdditionalInfoDto {
 
     private String modelName;
 
@@ -34,13 +35,8 @@ public class OfferDto {
 
     private int offerYear;
 
+    private LocalDateTime created;
 
-    public OfferDto() {
-
-    }
-
-    @NotEmpty(message = "Model name cannot be null or empty!")
-    @Length(min = 1, message = "Model name should be at least 1 characters long!")
     public String getModelName() {
         return modelName;
     }
@@ -49,8 +45,6 @@ public class OfferDto {
         this.modelName = modelName;
     }
 
-    @NotEmpty(message = "User name cannot be null or empty!")
-    @Length(min = 1, message = "User name should be at least 1 characters long!")
     public String getUserName() {
         return userName;
     }
@@ -59,9 +53,6 @@ public class OfferDto {
         this.userName = userName;
     }
 
-    @NotNull
-    @NotEmpty(message = "Description cannot be null or empty!")
-    @Size(min = 1, max=100, message = "Description should be at least 1 characters long!")
     public String getDescription() {
         return description;
     }
@@ -70,7 +61,6 @@ public class OfferDto {
         this.description = description;
     }
 
-    @NotNull(message="Category cannot be null. Please choose it!")
     public Engine getEngine() {
         return engine;
     }
@@ -79,8 +69,6 @@ public class OfferDto {
         this.engine = engine;
     }
 
-    @NotEmpty(message = "Image url cannot be null or empty!")
-    @Length(min = 10, max = 255, message = "URL of image must be more than 10 characters!")
     public String getImageUrl() {
         return imageUrl;
     }
@@ -97,7 +85,6 @@ public class OfferDto {
         this.mileage = mileage;
     }
 
-    @DecimalMin(value = "360")
     public BigDecimal getPrice() {
         return price;
     }
@@ -106,7 +93,6 @@ public class OfferDto {
         this.price = price;
     }
 
-    @NotNull(message="Transmission cannot be null. Please choose it!")
     public Transmission getTransmission() {
         return transmission;
     }
@@ -115,14 +101,20 @@ public class OfferDto {
         this.transmission = transmission;
     }
 
-    @Min(value = 1880, message = "Year must be a number after 1880!")
-    @NotNull(message = "Year must not be null or empty!")
     public int getOfferYear() {
         return offerYear;
     }
 
     public void setOfferYear(int offerYear) {
         this.offerYear = offerYear;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
     }
 
 }

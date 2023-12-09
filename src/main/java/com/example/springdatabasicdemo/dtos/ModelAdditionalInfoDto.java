@@ -1,17 +1,22 @@
-package com.example.springdatabasicdemo.models;
+package com.example.springdatabasicdemo.dtos;
+
 import com.example.springdatabasicdemo.enums.Category;
-import jakarta.persistence.*;
+import com.example.springdatabasicdemo.models.Offer;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+public class ModelAdditionalInfoDto {
 
-@Entity
-@Table(name = "models")
-public class Model extends BaseEntity {
+    private String brand;
 
     private String name;
 
@@ -23,14 +28,10 @@ public class Model extends BaseEntity {
 
     private int endYear;
 
-    private Brand brand;
+    private LocalDateTime created;
 
-    private List<Offer> offers;
+    private LocalDateTime modified;
 
-    protected Model() {
-    }
-
-    @Column(name = "model_name", nullable = false)
     public String getName() {
         return name;
     }
@@ -39,8 +40,6 @@ public class Model extends BaseEntity {
         this.name = name;
     }
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "category", nullable = false)
     public Category getCategory() {
         return category;
     }
@@ -49,7 +48,6 @@ public class Model extends BaseEntity {
         this.category = category;
     }
 
-    @Column(name = "image_url", nullable = false)
     public String getImageUrl() {
         return imageUrl;
     }
@@ -58,7 +56,6 @@ public class Model extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    @Column(name = "start_year", nullable = false)
     public int getStartYear() {
         return startYear;
     }
@@ -67,7 +64,6 @@ public class Model extends BaseEntity {
         this.startYear = startYear;
     }
 
-    @Column(name = "end_year", nullable = false)
     public int getEndYear() {
         return endYear;
     }
@@ -76,22 +72,28 @@ public class Model extends BaseEntity {
         this.endYear = endYear;
     }
 
-    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "brand_id", nullable = true)
-    public Brand getBrand() {
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getModified() {
+        return modified;
+    }
+
+    public void setModified(LocalDateTime modified) {
+        this.modified = modified;
+    }
+
+    public String getBrand() {
         return brand;
     }
 
-    public void setBrand(Brand brand) {
+    public void setBrand(String brand) {
         this.brand = brand;
     }
 
-    @OneToMany(mappedBy = "model", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public List<Offer> getOffers() {
-        return offers;
-    }
-
-    public void setOffers(List<Offer> offers) {
-        this.offers = offers;
-    }
 }

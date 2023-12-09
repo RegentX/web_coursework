@@ -10,7 +10,10 @@
             <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
                 <h2 class="text-center text-dark mt-5">All roles</h2>
                 <div th:each="role : ${roleList}" class="d-flex flex-column bg-text mb-3">
-                    <h2 th:text="'User: ' + ${role}"></h2>
+                    <h2 th:text="${role.roleName}"></h2>
+                    <form th:action="@{|/roles/delete/role/${role.getRoleName()}|}" method="post">
+                        <button type="submit" class="btn btn-primary" style="background-color: red">Delete Role</button>
+                    </form>
                 </div>
             </div>
         </div>

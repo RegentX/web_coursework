@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -51,10 +52,11 @@ public class BrandServiceImpl implements BrandService{
     }
 
     @Override
-    public List<BrandDto> getAllBrands() {
-        return brandRepository.findAll().stream().map((c)->modelMapper.map(c,BrandDto.class)).collect(Collectors.toList());
+    public List<AddBrandDto> getAllBrands() {
+        return brandRepository.findAll().stream().map((c)->modelMapper.map(c,AddBrandDto.class)).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void deleteBrandByName(String brandName) {
         brandRepository.deleteBrandByName(brandName);

@@ -2,6 +2,7 @@ package com.example.springdatabasicdemo.controllers;
 
 import com.example.springdatabasicdemo.dtos.OfferDto;
 import com.example.springdatabasicdemo.dtos.RoleDto;
+import com.example.springdatabasicdemo.enums.UserRole;
 import com.example.springdatabasicdemo.services.OfferService;
 import com.example.springdatabasicdemo.services.RoleService;
 import jakarta.validation.Valid;
@@ -59,6 +60,12 @@ public class RoleController {
     @GetMapping("delete/id/{id}")
     public String deleteRoleById(@PathVariable("id") String roleId) {
         roleService.deleteRoleById(roleId);
+        return "redirect:/roles/all";
+    }
+
+    @PostMapping("delete/role/{roleName}")
+    public String deleteRoleByRoleName(@PathVariable UserRole roleName) {
+        roleService.deleteRoleByRoleName(roleName);
         return "redirect:/roles/all";
     }
 }

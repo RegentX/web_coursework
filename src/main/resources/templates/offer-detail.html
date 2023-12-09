@@ -6,7 +6,7 @@
 <main class="flex-shrink-0">
     <div class="container">
         <h2 class="text-center text-dark mt-5">All Offers</h2>
-        <div th:each="o : ${offerList}" class="mb-3">
+        <div th:each="o : ${offerDetails}" class="mb-3">
             <div class="row bg-light p-3 rounded">
                 <!-- Picture Column -->
                 <div class="col-md-6">
@@ -18,11 +18,10 @@
                     <h3 th:text="'Model: ' + ${o.modelName}"></h3>
                     <h3 th:text="'Category: ' + ${o.engine}"></h3>
                     <h3 th:text="'Start year: ' + ${o.transmission}"></h3>
-                    <h3 th:text="'End Year: ' + ${o.offerYear}"></h3>
-                    <a th:href="@{|/offers/offer-details/${o.modelName}/${o.userName}|}" class="btn btn-primary">Detail Info</a>
-                    <form th:action="@{|/offers/delete/offer/${o.modelName}/${o.userName}|}" method="post" style="display: flex; justify-content: center;">
-                        <button type="submit" class="btn btn-primary" style="background-color: red">Delete Offer</button>
-                    </form>
+                    <h3 th:text="'Offer year: ' + ${o.offerYear}"></h3>
+                    <h3 th:text="'Description: ' + ${o.description}"></h3>
+                    <h3 th:text="'Mileage: ' + ${o.mileage}"></h3>
+                    <h3 th:text="'Created: ' + ${o.created}"></h3>
                 </div>
             </div>
         </div>

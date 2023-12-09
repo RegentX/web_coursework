@@ -1,6 +1,8 @@
 package com.example.springdatabasicdemo.services;
 
+import com.example.springdatabasicdemo.dtos.AddModelDto;
 import com.example.springdatabasicdemo.dtos.BrandDto;
+import com.example.springdatabasicdemo.dtos.ModelAdditionalInfoDto;
 import com.example.springdatabasicdemo.dtos.ModelDto;
 import com.example.springdatabasicdemo.enums.Category;
 
@@ -11,7 +13,9 @@ public interface ModelService {
 
     List<ModelDto> getAllModels();
 
-    ModelDto createNewModel(ModelDto model);
+    AddModelDto createNewModel(AddModelDto model);
+
+    ModelAdditionalInfoDto getModelByBrandAndName(String brandName, String modelName);
 
     Optional<List<ModelDto>> getModelsOfUniqueBrand(BrandDto brand);
 
@@ -19,9 +23,13 @@ public interface ModelService {
 
     Optional<List<ModelDto>> getModelsOfCategory(Category category);
 
+    void editModel(String modelName, String brandName, AddModelDto modelDto);
+
     void updateModelEndYear(int endYear, ModelDto modelDto);
 
     void addModelImage(String imageUrl, String id);
 
     void deleteModelById(String id);
+
+    void deleteModelByBrandAndName(String brandName, String modelname);
 }

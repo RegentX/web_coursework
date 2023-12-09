@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header"/>
+<body class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
+                <div class="justify-content-center">
+                    <h1>Add Role</h1>
+                </div>
+                <form th:action="@{/roles/create}"
+                      th:method="post"
+                      th:object="${roleModel}"
+                      class="m-md-auto w-50 pb-3">
+                    <fieldset class="">
+                        <label style="display: flex; justify-content: center; font-weight: bold">Choose Role</label>
+                        <div style="margin: 0 40%">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input th:field="*{roleName}"
+                                           th:value="ADMIN"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input" name="role"/>
+                                    <span>Admin</span>
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <label class="form-check-label">
+                                    <input th:field="*{roleName}"
+                                           th:value="USER"
+                                           th:errorclass="is-invalid"
+                                           type="radio" class="form-check-input" name="role"/>
+                                    <span>User</span>
+                                </label>
+                            </div>
+                        </div>
+                        </fieldset>
+                    <div class="button-container" style="display: flex; justify-content: center;">
+                        <button type="submit" class="btn btn-secondary">Add Role</button>
+                    </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>

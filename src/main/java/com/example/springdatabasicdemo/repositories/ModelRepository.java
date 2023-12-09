@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface ModelRepository extends JpaRepository<Model, String> {
 
+    Model findModelByBrandAndName(Brand brand, String name);
+
     Model findModelById(String id);
 
     Model findModelByName(String name);
@@ -24,6 +26,8 @@ public interface ModelRepository extends JpaRepository<Model, String> {
     List<Model> findModelsByStartYear(int startYear);
 
     Model deleteModelById(String id);
+
+    void deleteModelByBrandAndAndName(Brand brand, String name);
 
 }
 
